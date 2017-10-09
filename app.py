@@ -1,4 +1,4 @@
-#Ibnul Jahan and Daria Shifrina
+#Ibnul Jahan and Yuyang Zhang
 #SoftDev pd 7
 #HW07 -- Do I Know You?
 #2017-10-04
@@ -8,6 +8,8 @@ from flask import Flask, render_template, request, session, redirect
 import os
 
 app = Flask(__name__)
+user1 = "username"
+pass1 = "password"
 
 #creates String of 26 random characters
 app.secret_key = os.urandom(26)
@@ -35,16 +37,18 @@ def logged():
     password = request.form["password"]
 
     #poo is our account username, and pee is the respective password
-    if(username == "poo" and password == "pee"):
+    if(username == user1 and password == pass1):
         session["username"] = username
         #if both username and password match, show them the greet page
         return render_template("greet.html", username= username)
     #tell user their username is wrong if it does not match
-    if(username != "poo"):
-        return "Your <b>username</b> is incorrect. You entered <i>" + username + "</i>, but we do not have this account on record. <a href='/'>Try again</a>.<br>Remember, usernames are case-sensitive."
+    if(username != user1):
+         msg = 'Your username is incorrect. You entered  "' + username + '", but we do not have this account on record. Remember, usernames are case-sensitive.'
+         return render_template("error.html", errormsg = msg)
     #tell user their password is wrong if it does not match
-    if(password != "pee"):
-        return "Your <b>password</b> is incorrect. <a href='/'>Try again</a>.<br>Remember, passwords are case-sensitive."
+    if(password != pass1):
+         msg = 'Your password is incorrect. Remember, passwords are case-sensitive.'
+         return render_template("error.html", errormsg = msg)
 
 #Removes user from the session (if they were in it to begin with), and then tells them
 @app.route("/loggedout", methods=["GET","POST"])
