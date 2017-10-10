@@ -24,7 +24,7 @@ def login():
         username = session["username"]
         #return the greeting page if the user is logged in
         return redirect("loggedin")
-    #return the login page if thet are not
+    #return the login page if they are not
     return render_template("form.html", username = username)
 
 #woo will check to see the inputted username and password combination match the one on record
@@ -56,7 +56,7 @@ def verify():
     if(password != pass1):
          msg = 'Your password is incorrect. Remember, passwords are case-sensitive.'
          #return render_template("error.html", errormsg = msg)
-         return redirect(url_for("mistake", msg = msg, test = 1))
+         #return redirect(url_for("mistake", msg = msg, test = 1))
          return redirect(url_for("mistake", msg = msg))
 
 #Removes user from the session (if they were in it to begin with), and then tells them
@@ -80,6 +80,7 @@ def youre_in():
 #Lets the user know they made a mistake
 @app.route("/error")
 def mistake():
+    #during verification, when you redirect to mistake you specify the error message and pass it over the url
     msg = request.args.get("msg")
     return render_template("error.html", errormsg = msg)
 
