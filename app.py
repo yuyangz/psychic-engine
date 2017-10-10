@@ -1,10 +1,10 @@
 #Ibnul Jahan and Yuyang Zhang
 #SoftDev pd 7
-#HW07 -- Do I Know You?
+#HW08 -- 
 #2017-10-04
 
 #lots to import
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, url_for
 import os
 
 app = Flask(__name__)
@@ -23,32 +23,36 @@ def login():
     if "username" in session:
         username = session["username"]
         #return the greeting page if the user is logged in
-        return render_template("greet.html", username= username)
+        return redirect(url_for("logged"))
     #return the login page if thet are not
     return render_template("form.html", username = username)
 
 #woo will check to see the inputted username and password combination match the one on record
 @app.route("/woo", methods=["GET","POST"])
 def logged():
-    #if someone is currently in session, it logs them out after the form is filled
-    if "username" in session:
-        session.pop("username")
     username = request.form["username"]
     password = request.form["password"]
-
     #poo is our account username, and pee is the respective password
     if(username == user1 and password == pass1):
         session["username"] = username
         #if both username and password match, show them the greet page
         return render_template("greet.html", username= username)
+    
+def user_wrong():
+    username = request.form["username"]
+    password = request.form["password"]
     #tell user their username is wrong if it does not match
     if(username != user1):
          msg = 'Your username is incorrect. You entered  "' + username + '", but we do not have this account on record. Remember, usernames are case-sensitive.'
          return render_template("error.html", errormsg = msg)
+     
+def pass_wrong():
+    username = request.form["username"]
+    password = request.form["password"]
     #tell user their password is wrong if it does not match
     if(password != pass1):
          msg = 'Your password is incorrect. Remember, passwords are case-sensitive.'
-         return render_template("error.html", errormsg = msg)
+         return redirect(url_for("user_wrong"))
 
 #Removes user from the session (if they were in it to begin with), and then tells them
 @app.route("/loggedout", methods=["GET","POST"])
