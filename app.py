@@ -1,7 +1,7 @@
 #Ibnul Jahan and Yuyang Zhang
 #SoftDev pd 7
 #HW08 -- 
-#2017-10-04
+#2017-10-10
 
 #lots to import
 from flask import Flask, render_template, request, session, redirect, url_for
@@ -38,21 +38,17 @@ def logged():
         #if both username and password match, show them the greet page
         return render_template("greet.html", username= username)
     
-def user_wrong():
-    username = request.form["username"]
-    password = request.form["password"]
+
     #tell user their username is wrong if it does not match
     if(username != user1):
          msg = 'Your username is incorrect. You entered  "' + username + '", but we do not have this account on record. Remember, usernames are case-sensitive.'
          return render_template("error.html", errormsg = msg)
      
-def pass_wrong():
-    username = request.form["username"]
-    password = request.form["password"]
+
     #tell user their password is wrong if it does not match
     if(password != pass1):
          msg = 'Your password is incorrect. Remember, passwords are case-sensitive.'
-         return redirect(url_for("user_wrong"))
+         return redirect(url_for("logged"))
 
 #Removes user from the session (if they were in it to begin with), and then tells them
 @app.route("/loggedout", methods=["GET","POST"])
