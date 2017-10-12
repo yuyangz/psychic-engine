@@ -4,7 +4,7 @@
 #2017-10-10
 
 #lots to import
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for,flash
 import os
 
 app = Flask(__name__)
@@ -40,24 +40,24 @@ def verify():
     #checks if the form info matches the account info
     if(username == user1 and password == pass1):
         session["username"] = username
+        flash('Correct information')
         #if both username and password match, show them the greet page
             #return render_template("greet.html", username= username)
         return redirect("/loggedin")
 
     #tell user their username is wrong if it does not match
     if(username != user1):
-         msg = 'Your username is incorrect. You entered  "' + username + '", but we do not have this account on record. Remember, usernames are case-sensitive.'
-         #return render_template("error.html", errormsg = msg)
-         return redirect(url_for("mistake", msg = msg))
+         flash('Wrong username!')
+         return redirect(url_for("mistake"))
 
      
 
     #tell user their password is wrong if it does not match
     if(password != pass1):
-         msg = 'Your password is incorrect. Remember, passwords are case-sensitive.'
+        flash('Wrong password!')
          #return render_template("error.html", errormsg = msg)
          #return redirect(url_for("mistake", msg = msg, test = 1))
-         return redirect(url_for("mistake", msg = msg))
+        return redirect(url_for("mistake"))
 
 #Removes user from the session (if they were in it to begin with), and then tells them
 @app.route("/loggedout", methods=["GET","POST"])
@@ -81,8 +81,7 @@ def youre_in():
 @app.route("/error")
 def mistake():
     #during verification, when you redirect to mistake you specify the error message and pass it over the url
-    msg = request.args.get("msg")
-    return render_template("error.html", errormsg = msg)
+    return render_template("error.html")
 
 
 
